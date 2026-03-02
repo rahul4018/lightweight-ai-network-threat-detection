@@ -298,5 +298,3 @@ This project demonstrates:
 It is structured to simulate a real-world cybersecurity AI platform rather than a simple ML notebook project.
 
 ---
-
-If you want next-level polish, say:
