@@ -1,7 +1,5 @@
 #  Lightweight Explainable AI for Real-Time Network Threat Detection
 
----
-
 ##  Overview
 
 Modern enterprise networks generate massive volumes of traffic data, making manual monitoring infeasible.
