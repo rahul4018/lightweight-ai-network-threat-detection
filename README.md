@@ -283,18 +283,3 @@ This project is intended for research and educational purposes.
 - Docker + CI/CD integration
 
 ---
-
-#  Why This Project Stands Out
-
-This project demonstrates:
-
-- End-to-end ML system design
-- Real-time API architecture
-- Explainable AI integration
-- Security domain application
-- Production-style modular codebase
-- SOC-level visualization design
-
-It is structured to simulate a real-world cybersecurity AI platform rather than a simple ML notebook project.
-
----
