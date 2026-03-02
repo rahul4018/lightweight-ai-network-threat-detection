@@ -1,7 +1,5 @@
 #  Lightweight Explainable AI for Real-Time Network Threat Detection
 
-> Production-style AI-powered cybersecurity platform for real-time intrusion detection, threat scoring, anomaly detection, and explainable AI insights.
-
 ---
 
 ##  Overview
