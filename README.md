@@ -283,3 +283,5 @@ This project is intended for research and educational purposes.
 - Docker + CI/CD integration
 
 ---
+
+<img width="793" height="568" alt="image" src="https://github.com/user-attachments/assets/22b925a7-c8b7-4c8a-ab3c-53bf2d5b5858" />
