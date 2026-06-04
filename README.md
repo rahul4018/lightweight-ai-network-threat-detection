@@ -1,283 +1,232 @@
-#  Lightweight Explainable AI for Real-Time Network Threat Detection
+# Lightweight Explainable AI for Network Threat Detection
 
-## Overview
+> Real-time intrusion detection with risk scoring, MITRE ATT&CK mapping, SHAP explanations, and a SOC-style operations dashboard — running on CPU, no GPU required.
 
-Modern enterprise networks generate massive volumes of traffic data, making manual monitoring infeasible.
-
-This project delivers a lightweight yet powerful AI-driven intrusion detection system that:
-
-- Detects malicious traffic in real time
-- Assigns risk scores (0–100)
-- Classifies severity (LOW → CRITICAL)
-- Maps threats to MITRE ATT&CK tactics
-- Detects behavioral anomalies
-- Explains predictions using SHAP
-- Visualizes everything in a SOC-style dashboard
-
-Built using the **NSL-KDD dataset** and a modular, production-style ML architecture.
+**[Live Dashboard](https://your-app.streamlit.app)** · [API Docs](https://your-backend.onrender.com/docs) · [Report a Bug](https://github.com/rahul4018/lightweight-ai-network-threat-detection/issues)
 
 ---
 
-##  Core Capabilities
-
-###  Intelligent Threat Detection
-- Supervised ML classifier for intrusion detection
-- Risk score generation engine
-- Severity classification:
-  - LOW
-  - MEDIUM
-  - HIGH
-  - CRITICAL
-
-###  Real-Time Monitoring
-- Batch prediction mode
-- Simulated streaming mode
-- REST API prediction pipeline via FastAPI
-
-###  Explainable AI (XAI)
-- SHAP-based interpretability
-- Feature importance visualization
-- Transparent decision-making layer
-
-###  Behavioral Anomaly Detection
-- Isolation Forest model
-- Detects abnormal traffic patterns independent of labels
-
-###  MITRE ATT&CK Mapping
-Threat predictions mapped to tactical categories aligned with the MITRE ATT&CK framework.
-
-###  SOC Dashboard
-Enterprise-style monitoring interface built with Streamlit:
-
-- Risk Gauge
-- Threat Timeline
-- Severity Analytics
-- Session Explorer
-- AI-Generated Incident Report
+![SOC Dashboard](https://github.com/user-attachments/assets/22b925a7-c8b7-4c8a-ab3c-53bf2d5b5858)
 
 ---
 
-##  System Architecture
+## The problem
 
-```
-Streamlit Dashboard
-        │
-        │ REST API
-        ▼
-FastAPI Backend (Prediction Engine)
-        │
-        ▼
-ML Model + Encoders + Anomaly Detector + XAI
-```
-
-This architecture simulates a lightweight Security Operations Center (SOC) pipeline.
+Enterprise networks generate traffic volumes no human team can monitor manually. Most ML-based IDS tools are black boxes — they fire an alert, give no reason, and analysts either ignore them or spend hours investigating. This project fixes both problems: lightweight enough to run on modest hardware, explainable enough for a SOC analyst to act on.
 
 ---
 
-##  Project Structure
+## What it does
+
+- Classifies network traffic as normal or attack using a supervised ML model trained on NSL-KDD
+- Assigns a **risk score (0–100)** and severity level — LOW / MEDIUM / HIGH / CRITICAL
+- Maps threats to **MITRE ATT&CK tactics**
+- Flags behavioral anomalies via **Isolation Forest** (unsupervised, label-independent)
+- Explains every prediction with **SHAP feature importance**
+- Surfaces everything in a **SOC-style Streamlit dashboard** with risk gauge, threat timeline, session explorer, and AI-generated incident reports
+
+---
+
+## Architecture
 
 ```
-lightweight-ai-network-threat-detection/
-
-app/
- ├── backend/
- │    └── api.py
- ├── components/
- ├── pages/
- ├── dashboard.py
- ├── risk_engine.py
- └── stream_engine.py
-
-models/
- ├── model.pkl
- ├── encoders.pkl
- ├── top_features.pkl
- └── shap_summary.png
-
-data/
- ├── KDDTrain+.txt
- └── KDDTest+.txt
-
-notebooks/
- ├── train.py
- └── explain.py
-
-utils/
- ├── forecast.py
- └── report_generator.py
-
-requirements.txt
+┌──────────────────────────────┐
+│     Streamlit SOC Dashboard  │
+│                              │
+│  Risk Gauge · Timeline       │
+│  Severity Analytics          │
+│  Session Explorer · Reports  │
+└──────────────┬───────────────┘
+               │  REST API
+               ▼
+┌──────────────────────────────┐
+│     FastAPI Prediction Engine │
+└──────────────┬───────────────┘
+               │
+   ┌───────────┼────────────────┐
+   ▼           ▼                ▼
+ML Classifier  Isolation Forest  SHAP Explainer
+(supervised)   (anomaly)         (interpretability)
+   │
+   ▼
+Risk Scoring Engine → MITRE ATT&CK Mapper
 ```
 
 ---
 
-##  Dataset
-
-**Dataset Used:** NSL-KDD  
-An improved version of the KDD’99 intrusion detection dataset containing labeled network traffic sessions.
-
-Used for:
-- Supervised classification
-- Risk modeling
-- Feature engineering
-- Explainability experiments
-
----
-
-##  Machine Learning Pipeline
-
-1. Data preprocessing  
-2. Feature encoding  
-3. Feature selection  
-4. Model training (Scikit-learn)  
-5. Risk scoring engine  
-6. Isolation Forest anomaly detection  
-7. SHAP explainability layer  
-
----
-
-##  Tech Stack
+## Tech Stack
 
 | Layer | Technology |
-|-------|------------|
-| Backend | FastAPI |
-| Frontend | Streamlit |
-| ML | Scikit-learn |
-| Visualization | Plotly |
+|---|---|
+| Backend API | FastAPI |
+| Dashboard | Streamlit + Plotly |
+| ML | scikit-learn (classifier + Isolation Forest) |
 | Explainability | SHAP |
-| Data Processing | Pandas, NumPy |
-| Deployment | Render + Streamlit Cloud |
+| Data | Pandas · NumPy |
+| Dataset | NSL-KDD |
+| Deployment | Render (API) + Streamlit Cloud (dashboard) |
 
 ---
 
-##  Installation (Local Setup)
-
-### 1️ Clone Repository
+## Quickstart
 
 ```bash
 git clone https://github.com/rahul4018/lightweight-ai-network-threat-detection.git
 cd lightweight-ai-network-threat-detection
-```
 
-### 2️ Create Virtual Environment
-
-**Windows (PowerShell)**
-
-```bash
 python -m venv venv
-venv\Scripts\activate
-```
-
-### 3️ Install Dependencies
-
-```bash
+source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
----
-
-##  Run Backend API
+**Start the API:**
 
 ```bash
 cd app/backend
 uvicorn api:app --reload
 ```
 
-API docs available at:
+API docs → `http://localhost:8000/docs`
 
-```
-http://127.0.0.1:8000/docs
-```
-
----
-
-##  Run Dashboard
+**Start the dashboard:**
 
 ```bash
 cd app
 streamlit run dashboard.py
 ```
 
-Open:
+Dashboard → `http://localhost:8501`
+
+---
+
+## ML Pipeline
 
 ```
-http://localhost:8501
+Raw NSL-KDD traffic logs
+        │
+        ▼
+Preprocessing + feature encoding
+        │
+        ▼
+Feature selection (top N by importance)
+        │
+        ├──────────────────────────────┐
+        ▼                              ▼
+Supervised classifier            Isolation Forest
+(attack type + severity)         (behavioral anomaly)
+        │
+        ▼
+Risk scoring engine (0–100)
+        │
+        ▼
+SHAP explainability layer
+        │
+        ▼
+MITRE ATT&CK tactic mapping
+        │
+        ▼
+REST API response → Dashboard
 ```
 
 ---
 
-##  Deployment
+## API Reference
 
-### Backend (Render)
+**Batch predict**
 
-Start command:
+```
+POST /batch_predict
+```
+
+Input: array of network session feature vectors
+
+Response per session:
+
+```json
+{
+  "prediction": "neptune",
+  "risk_score": 87,
+  "severity": "HIGH",
+  "mitre_tactic": "Initial Access",
+  "anomaly_flag": true,
+  "top_features": [
+    { "feature": "dst_bytes", "shap_value": 0.41 },
+    { "feature": "duration",  "shap_value": 0.19 }
+  ],
+  "incident_summary": "High-confidence DoS pattern detected..."
+}
+```
+
+---
+
+## Project Structure
+
+```
+lightweight-ai-network-threat-detection/
+├── app/
+│   ├── backend/
+│   │   └── api.py              # FastAPI entrypoint
+│   ├── components/             # Dashboard UI components
+│   ├── pages/                  # Streamlit multipage views
+│   ├── dashboard.py            # Main dashboard
+│   ├── risk_engine.py          # Risk scoring logic
+│   └── stream_engine.py        # Simulated streaming mode
+├── models/
+│   ├── model.pkl               # Trained classifier
+│   ├── encoders.pkl            # Label encoders
+│   ├── top_features.pkl        # Selected feature list
+│   └── shap_summary.png        # SHAP summary plot
+├── data/
+│   ├── KDDTrain+.txt
+│   └── KDDTest+.txt
+├── notebooks/
+│   ├── train.py                # Model training script
+│   └── explain.py              # SHAP analysis
+├── utils/
+│   ├── forecast.py
+│   └── report_generator.py     # AI incident report generation
+└── requirements.txt
+```
+
+---
+
+## Deployment
+
+**Backend on Render:**
 
 ```bash
 uvicorn app.backend.api:app --host 0.0.0.0 --port $PORT
 ```
 
-### Dashboard (Streamlit Cloud)
+**Dashboard on Streamlit Cloud:**
 
-Main file:
-
-```
-app/dashboard.py
-```
-
-Update backend URL:
+Set main file to `app/dashboard.py`, then update the backend URL:
 
 ```python
-BACKEND_URL = "https://your-backend-url.onrender.com/batch_predict"
+BACKEND_URL = "https://your-backend.onrender.com/batch_predict"
 ```
 
 ---
 
-##  System Outputs
+## Dataset
 
-- Threat prediction
-- Risk score (0–100)
-- Severity classification
-- MITRE ATT&CK tactic
-- Behavioral anomaly flag
-- AI-generated incident report
+**NSL-KDD** — an improved version of the KDD Cup '99 intrusion detection dataset, with duplicate records removed and a more balanced test set. Contains labeled network session records across four attack categories: DoS, Probe, R2L, U2R.
+
+[Download NSL-KDD](https://www.unb.ca/cic/datasets/nsl.html)
 
 ---
 
-##  Use Cases
+## Roadmap
 
-- Security Operations Centers (SOC)
-- Network intrusion detection research
-- Explainable AI demonstrations
-- Cybersecurity analytics platforms
-- Academic and thesis projects
-
----
-
-##  Author
-
-**Rahul**  
-AI & Cybersecurity Enthusiast  
-
-GitHub:  
-https://github.com/rahul4018
+- [ ] Live packet capture via `scapy`
+- [ ] Kafka-based streaming pipeline
+- [ ] User authentication + RBAC
+- [ ] Docker Compose for one-command deployment
+- [ ] CI/CD pipeline
+- [ ] Deep learning model comparison (LSTM for sequence-based detection)
 
 ---
 
-##  License
+## License
 
-This project is intended for research and educational purposes.
-
----
-
-##  Future Enhancements
-
-- Live packet capture integration
-- Kafka-based streaming pipeline
-- Deep learning threat models
-- User authentication & RBAC
-- Cloud-native monitoring
-- Docker + CI/CD integration
-
----
-
-<img width="793" height="568" alt="image" src="https://github.com/user-attachments/assets/22b925a7-c8b7-4c8a-ab3c-53bf2d5b5858" />
+MIT — intended for research and educational use.
